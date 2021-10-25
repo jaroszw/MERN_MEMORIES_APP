@@ -1,40 +1,57 @@
-import React, { useState } from 'react';
-import useStyles from './styles';
-import { Text, Button, Typography, Paper, TextField } from '@mui/material';
-import FileBase from 'react-file-base64';
-import { useDispatch } from 'react-redux';
-import { createPost } from '../../actions/posts';
+import React, { useState, useEffect } from "react";
+import useStyles from "./styles";
+import { Button, Typography, Paper, TextField } from "@mui/material";
+import FileBase from "react-file-base64";
+import { useDispatch } from "react-redux";
+import { createPost, updatePost } from "../../actions/posts";
 
-const Form = () => {
+import { useSelector } from "react-redux";
+
+const Form = ({ currentId, setCurrentId }) => {
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((post) => post._id === currentId) : null
+  );
   const classes = useStyles();
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
-    creator: '',
-    title: '',
-    message: '',
-    tags: '',
-    selectedFile: '',
+    creator: "",
+    title: "",
+    message: "",
+    tags: "",
+    selectedFile: "",
   });
+
+  useEffect(() => {
+    if (post) {
+      setPostData(post);
+    }
+  }, [post]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createPost(postData));
+    if (currentId) {
+      dispatch(updatePost(currentId, postData));
+      setCurrentId(null);
+    } else {
+      dispatch(createPost(postData));
+    }
+
     setPostData({
-      creator: '',
-      title: '',
-      message: '',
-      tags: '',
-      selectedFile: '',
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
     });
   };
 
   const clear = () => {
     setPostData({
-      creator: '',
-      title: '',
-      message: '',
-      tags: '',
-      selectedFile: '',
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
     });
   };
 
