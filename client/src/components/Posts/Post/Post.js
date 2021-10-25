@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useStyles } from "./styles";
 import {
   Card,
@@ -14,8 +15,12 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import moment from "moment";
 
+import { deletePost, likePost } from "../../../actions/posts";
+
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  console.log("RENDER POST");
 
   return (
     <Card className={classes.card}>
@@ -44,16 +49,31 @@ const Post = ({ post, setCurrentId }) => {
           {post.tags.map((tag) => `#${tag}`)}
         </Typography>
       </div>
+      <Typography className={classes.title} variant="h6" gutterBottom>
+        {post.title}
+      </Typography>
       <CardContent>
         <Typography className={classes.title} variant="subtitle2" gutterBottom>
           {post.message}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" onClick={() => {}}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => {
+            dispatch(likePost(post._id));
+          }}
+        >
           <ThumbUpOffAltIcon fontSize="small" /> Like {post.likeCount}
         </Button>
-        <Button size="small" color="primary" onClick={() => {}}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => {
+            dispatch(deletePost(post._id));
+          }}
+        >
           <DeleteOutlineIcon fontSize="small" /> Delete
         </Button>
       </CardActions>

@@ -31,11 +31,11 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
     if (currentId) {
       dispatch(updatePost(currentId, postData));
-      setCurrentId(null);
     } else {
       dispatch(createPost(postData));
     }
 
+    setCurrentId(null);
     setPostData({
       creator: "",
       title: "",
@@ -53,6 +53,7 @@ const Form = ({ currentId, setCurrentId }) => {
       tags: "",
       selectedFile: "",
     });
+    setCurrentId(null);
   };
 
   return (
@@ -64,7 +65,9 @@ const Form = ({ currentId, setCurrentId }) => {
         onSubmit={handleSubmit}
         action=""
       >
-        <Typography variant="h6">Creating Memories</Typography>
+        <Typography variant="h6">
+          {currentId ? "Editing" : "Creating"} Memories
+        </Typography>
         <TextField
           name="creator"
           variant="outlined"
