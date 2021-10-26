@@ -4,7 +4,7 @@ import {
   UPDATE,
   DELETE,
   LIKE,
-} from "../constants/actionTypes";
+} from "../reducers/actionTypes";
 import * as api from "../api/index";
 
 export const getPosts = () => async (dispatch) => {

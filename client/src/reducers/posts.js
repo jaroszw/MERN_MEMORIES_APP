@@ -4,27 +4,31 @@ import {
   UPDATE,
   DELETE,
   LIKE,
-} from "../constants/actionTypes";
+} from './actionTypes';
 
-const reducers = (posts = [], action) => {
+const initialState = {
+  posts: [],
+};
+
+const postsReducers = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ALL:
       return action.payload;
     case CREATE:
-      return [...posts, action.payload];
+      return [...state.posts, action.payload];
     case UPDATE:
-      return posts.map((post) =>
+      return state.posts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
     case DELETE:
-      return posts.filter((post) => post._id !== action.payload);
+      return state.posts.filter((post) => post._id !== action.payload);
     case LIKE:
-      return posts.map((post) =>
+      return state.posts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );
     default:
-      return posts;
+      return state;
   }
 };
 
-export default reducers;
+export default postsReducers;

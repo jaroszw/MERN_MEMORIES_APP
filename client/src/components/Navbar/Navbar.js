@@ -1,12 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { AppBar, Typography, Avatar, Button, Toolbar } from "@mui/material";
-import memories from "../../images/memories.png";
-import useStyles from "./styles";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { AppBar, Typography, Avatar, Button, Toolbar } from '@mui/material';
+import memories from '../../images/memories.png';
+import useStyles from './styles';
 
 const Navbar = () => {
   const classes = useStyles();
-  const user = null;
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('profile')));
+  }, []);
+
+  const logout = () => {
+    dispatch({ type: 'LOGOUT' });
+    history.push('/');
+    setUser(null);
+  };
+
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
       <div className={classes.brandContainer}>
@@ -32,13 +46,16 @@ const Navbar = () => {
               {user.result.name.charAt[0]}
             </Avatar>
             <Typography className={classes.userName} variant="h6">
-              {user.result.name}
+              {user.result.givenName}
             </Typography>
             <Button
               variant="contained"
               className={classes.logout}
               color="secondary"
-            ></Button>
+              onClick={logout}
+            >
+              Log out
+            </Button>
           </div>
         ) : (
           <Button
@@ -47,7 +64,7 @@ const Navbar = () => {
             color="primary"
             variant="contained"
           >
-            Sign In{" "}
+            Sign In{' '}
           </Button>
         )}
       </Toolbar>

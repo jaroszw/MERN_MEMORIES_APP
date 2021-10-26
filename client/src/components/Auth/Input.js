@@ -1,29 +1,45 @@
-import React from "react";
-import { Grid, TextField, InputAdornment, IconButton } from "@mui/material";
+import React from 'react';
+import { Grid, TextField, InputAdornment, IconButton } from '@mui/material';
 
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-const Input = ({ handleShowPassword, handleChange, type, name }) => {
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+const Input = ({
+  name,
+  handleChange,
+  label,
+  half,
+  autoFocus,
+  type,
+  handleShowPassword,
+}) => {
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} sm={half ? 6 : 12}>
       <TextField
         name={name}
-        handleChange={handleChange}
+        onChange={handleChange}
+        variant="outlined"
+        required
+        fullWidth
+        label={label}
+        autoFocus={autoFocus}
         type={type}
         InputProps={
-          name === "email" && {
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleShowPassword}>
-                  {type === "password" ? (
-                    <VisibilityIcon />
-                  ) : (
-                    <VisibilityOffIcon />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }
+          name === 'password'
+            ? {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleShowPassword}>
+                      {type === 'password' ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
+            : null
         }
       />
     </Grid>
