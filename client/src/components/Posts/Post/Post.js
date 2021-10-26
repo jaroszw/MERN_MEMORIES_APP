@@ -20,7 +20,6 @@ import { deletePost, likePost } from "../../../actions/posts";
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  console.log("RENDER POST");
 
   return (
     <Card className={classes.card}>
@@ -46,14 +45,14 @@ const Post = ({ post, setCurrentId }) => {
       </div>
       <div className={classes.details}>
         <Typography variant="body2" color="textSecondary">
-          {post.tags.map((tag) => `#${tag}`)}
+          {post.tags.map((tag) => ` #${tag}`)}
         </Typography>
       </div>
       <Typography className={classes.title} variant="h6" gutterBottom>
         {post.title}
       </Typography>
       <CardContent>
-        <Typography className={classes.title} variant="subtitle2" gutterBottom>
+        <Typography variant="body2" color="textSecondary" component="p">
           {post.message}
         </Typography>
       </CardContent>
@@ -65,7 +64,8 @@ const Post = ({ post, setCurrentId }) => {
             dispatch(likePost(post._id));
           }}
         >
-          <ThumbUpOffAltIcon fontSize="small" /> Like {post.likeCount}
+          <ThumbUpOffAltIcon fontSize="small" />
+          &nbsp; Like &nbsp; {post.likeCount}
         </Button>
         <Button
           size="small"
