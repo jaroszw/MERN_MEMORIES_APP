@@ -1,5 +1,5 @@
-import PostMessage from "../models/postsMessage.js";
-import mongoose from "mongoose";
+import PostMessage from '../models/postsMessage.js';
+import mongoose from 'mongoose';
 
 export const getPosts = async (req, res) => {
   try {
@@ -51,7 +51,7 @@ export const deletePost = async (req, res) => {
 
   try {
     await PostMessage.findOneAndRemove(id);
-    res.status(200).send({ message: "Post deleted successfully" });
+    res.status(200).send({ message: 'Post deleted successfully' });
   } catch (error) {
     console.log({ error: error });
     res.status(400).send({ error: error });
@@ -63,15 +63,24 @@ export const likePost = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No post with id: ${id}`);
 
+  if (!req.userId) {
+    return res.json({ message: 'Unauthenticated' });
+  }
+
   try {
     const post = await PostMessage.findById(id);
-    const updatedPost = await PostMessage.findByIdAndUpdate(
-      id,
-      {
-        likeCount: post.likeCount + 1,
-      },
-      { new: true }
-    );
+    const index = post.likes.findIndex((id) => id === String(req.userId));
+
+    if (index === -1) {
+      post.likes.push(req.userId);
+    } else {
+      post.likes = post.likes.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, {
+      new: true,
+    });
+
     res.status(200).json(updatedPost);
   } catch (error) {
     res.status(400).send({ error: error });
