@@ -15,12 +15,22 @@ import { useTheme } from '@mui/styles';
 import Input from './Input';
 import { GoogleLogin } from 'react-google-login';
 import Icon from './Icon';
+import { signup, signin } from '../../actions/auth';
+
+const initialState = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
 
 const Auth = (props) => {
   const theme = useTheme();
   const classes = useStyles(theme);
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -29,10 +39,19 @@ const Auth = (props) => {
     setShowPassword(false);
   };
   const handleShowPassword = () => setShowPassword(!showPassword);
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isSignup) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(signin(formData, history));
+    }
+  };
 
   const handleChange = (e) => {
-    console.log(e.target.value);
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const googleSuccess = async (res) => {
