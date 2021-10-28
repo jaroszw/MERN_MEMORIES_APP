@@ -1,16 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
 
-const urlPost = 'http://localhost:5000/posts';
-const urlAuth = 'http://localhost:5000/auth';
+const API = axios.create({ baseURL: "http://localhost:5000" });
 
-export const fetchPosts = () => axios.get(urlPost);
-export const createPost = (newPost) => axios.post(urlPost, newPost);
-export const likePost = (id) => axios.patch(`${urlPost}/${id}/likePost`);
+export const fetchPosts = () => API.get("/posts");
+export const createPost = (newPost) => API.post("/posts", newPost);
+export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 export const updatePost = (id, updatedPost) =>
-  axios.patch(`${urlPost}/${id}`, updatedPost);
-export const deletePost = (id) => axios.delete(`${urlPost}/${id}`);
+  API.patch(`/posts/${id}`, updatedPost);
+export const deletePost = (id) => API.delete(`/posts/${id}`);
 
 // auth actions
 
-export const signin = (userData) => axios.post(urlAuth, userData);
-export const signup = (userData) => axios.post(`${urlAuth}/signup`, userData);
+export const signIn = (formData) => API.post(`/user/signin`, formData);
+export const signUp = (formData) => API.post(`/user/signup`, formData);

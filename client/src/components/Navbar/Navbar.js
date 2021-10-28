@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { AppBar, Typography, Avatar, Button, Toolbar } from '@mui/material';
-import memories from '../../images/memories.png';
-import useStyles from './styles';
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { AppBar, Typography, Avatar, Button, Toolbar } from "@mui/material";
+import memories from "../../images/memories.png";
+import useStyles from "./styles";
 
 const Navbar = () => {
   const classes = useStyles();
@@ -13,19 +13,19 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('profile')));
+    setUser(JSON.parse(localStorage.getItem("profile")));
   }, []);
-
-  const logout = () => {
-    dispatch({ type: 'LOGOUT' });
-    history.push('/');
-    setUser(null);
-  };
 
   useEffect(() => {
     const token = user?.token;
-    setUser(JSON.parse(localStorage.getItem('profile')));
+    setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
+
+  const logout = () => {
+    dispatch({ type: "LOGOUT" });
+    history.push("/");
+    setUser(null);
+  };
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
@@ -70,7 +70,7 @@ const Navbar = () => {
             color="primary"
             variant="contained"
           >
-            Sign In{' '}
+            Sign In{" "}
           </Button>
         )}
       </Toolbar>
