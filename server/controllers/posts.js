@@ -1,5 +1,5 @@
-import PostMessage from '../models/postsMessage.js';
-import mongoose from 'mongoose';
+import PostMessage from "../models/postsMessage.js";
+import mongoose from "mongoose";
 
 export const getPosts = async (req, res) => {
   try {
@@ -12,7 +12,11 @@ export const getPosts = async (req, res) => {
 
 export const createPost = async (req, res) => {
   const post = req.body;
-  const newPost = new PostMessage(post);
+  const newPost = new PostMessage({
+    ...post,
+    creator: req.userId,
+    createdAt: new Date().toISOString(),
+  });
   try {
     await newPost.save();
     res.status(201).json(newPost);
@@ -51,7 +55,7 @@ export const deletePost = async (req, res) => {
 
   try {
     await PostMessage.findOneAndRemove(id);
-    res.status(200).send({ message: 'Post deleted successfully' });
+    res.status(200).send({ message: "Post deleted successfully" });
   } catch (error) {
     console.log({ error: error });
     res.status(400).send({ error: error });
@@ -60,21 +64,24 @@ export const deletePost = async (req, res) => {
 
 export const likePost = async (req, res) => {
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No post with id: ${id}`);
+
+  if (!mongoose.Types.ObjectId.isValid(req.userId)) {
+    console.log("TYPE", req.userId);
+    return res.status(404).send(`No post with id: ${req.id}`);
+  }
 
   if (!req.userId) {
-    return res.json({ message: 'Unauthenticated' });
+    return res.json({ message: "Unauthenticated" });
   }
 
   try {
     const post = await PostMessage.findById(id);
-    const index = post.likes.findIndex((id) => id === String(req.userId));
+    const index = post.likes.findIndex((like) => like === String(req.userId));
 
     if (index === -1) {
       post.likes.push(req.userId);
     } else {
-      post.likes = post.likes.filter((id) => id !== String(req.userId));
+      post.likes = post.likes.filter((like) => like !== String(req.userId));
     }
 
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, {
@@ -83,6 +90,7 @@ export const likePost = async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (error) {
+    console.log("ERRROR");
     res.status(400).send({ error: error });
   }
 };

@@ -17,8 +17,10 @@ export const getPosts = () => async (dispatch) => {
 };
 
 export const createPost = (post) => async (dispatch) => {
+  console.log("ACTION POST", post);
   try {
     const { data } = await api.createPost(post);
+    console.log("POST_RETURNED_FROM_BACKEND", data);
     dispatch({ type: CREATE, payload: data });
   } catch (error) {
     console.log(error);
@@ -47,6 +49,7 @@ export const deletePost = (id) => async (dispatch) => {
 export const likePost = (id) => async (dispatch) => {
   try {
     const { data } = await api.likePost(id);
+    console.log(data);
     dispatch({ type: LIKE, payload: data });
   } catch (error) {
     console.log(error);

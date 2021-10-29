@@ -1,7 +1,7 @@
 import { AUTH, LOGOUT } from "./actionTypes";
 
 const initialState = {
-  authData: null,
+  authData: JSON.parse(localStorage.getItem("profile")) || null,
 };
 
 const authReducers = (state = initialState, action) => {

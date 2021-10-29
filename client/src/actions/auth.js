@@ -2,7 +2,6 @@ import { AUTH } from "../reducers/actionTypes";
 import * as api from "../api/index";
 
 export const signin = (formData, history) => async (dispatch) => {
-  console.log("SIGNING IN");
   try {
     const { data } = await api.signIn(formData);
     console.log(data);
