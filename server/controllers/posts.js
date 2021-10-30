@@ -1,5 +1,5 @@
-import PostMessage from "../models/postsMessage.js";
-import mongoose from "mongoose";
+import PostMessage from '../models/postsMessage.js';
+import mongoose from 'mongoose';
 
 export const getPosts = async (req, res) => {
   try {
@@ -17,6 +17,7 @@ export const createPost = async (req, res) => {
     creator: req.userId,
     createdAt: new Date().toISOString(),
   });
+
   try {
     await newPost.save();
     res.status(201).json(newPost);
@@ -27,7 +28,7 @@ export const createPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   const { id } = req.params;
-  const { title, message, creator, selectedFile, tags } = req.body;
+  const { title, message, creator, selectedFile, tags, likes } = req.body;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id))
@@ -36,6 +37,7 @@ export const updatePost = async (req, res) => {
       creator,
       title,
       message,
+      likes,
       tags,
       selectedFile,
       _id: id,
@@ -55,9 +57,8 @@ export const deletePost = async (req, res) => {
 
   try {
     await PostMessage.findOneAndRemove(id);
-    res.status(200).send({ message: "Post deleted successfully" });
+    res.status(200).send({ message: 'Post deleted successfully' });
   } catch (error) {
-    console.log({ error: error });
     res.status(400).send({ error: error });
   }
 };
@@ -66,12 +67,11 @@ export const likePost = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(req.userId)) {
-    console.log("TYPE", req.userId);
     return res.status(404).send(`No post with id: ${req.id}`);
   }
 
   if (!req.userId) {
-    return res.json({ message: "Unauthenticated" });
+    return res.json({ message: 'Unauthenticated' });
   }
 
   try {
@@ -90,7 +90,7 @@ export const likePost = async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (error) {
-    console.log("ERRROR");
+    console.log('ERRROR');
     res.status(400).send({ error: error });
   }
 };

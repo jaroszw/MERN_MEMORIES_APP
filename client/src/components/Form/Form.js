@@ -1,25 +1,28 @@
-import React, { useState, useEffect } from "react";
-import useStyles from "./styles";
-import { Button, Typography, Paper, TextField } from "@mui/material";
-import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { createPost, updatePost } from "../../actions/posts";
+import React, { useState, useEffect } from 'react';
+import useStyles from './styles';
+import { Button, Typography, Paper, TextField } from '@mui/material';
+import FileBase from 'react-file-base64';
+import { useDispatch } from 'react-redux';
+import { createPost, updatePost } from '../../actions/posts';
 
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 
 const Form = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) =>
-    currentId ? state.posts.find((post) => post._id === currentId) : null
+    currentId ? state.posts.posts.find((post) => post._id === currentId) : null
   );
+
+  const test = useSelector((state) => state);
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
-    title: "",
-    message: "",
-    tags: "",
-    selectedFile: "",
+    title: '',
+    message: '',
+    tags: '',
+    selectedFile: '',
   });
-  const user = JSON.parse(localStorage.getItem("profile"));
+  const user = JSON.parse(localStorage.getItem('profile'));
 
   useEffect(() => {
     if (post) {
@@ -28,6 +31,7 @@ const Form = ({ currentId, setCurrentId }) => {
   }, [post]);
 
   const handleSubmit = (e) => {
+    console.log('FORM CURRENT_ID', currentId);
     e.preventDefault();
     if (currentId === 0) {
       dispatch(createPost({ ...postData, name: user?.result?.name }));
@@ -36,21 +40,21 @@ const Form = ({ currentId, setCurrentId }) => {
         updatePost(currentId, { ...postData, name: user?.result?.name })
       );
     }
-    setCurrentId(null);
+    setCurrentId(0);
     setPostData({
-      title: "",
-      message: "",
-      tags: "",
-      selectedFile: "",
+      title: '',
+      message: '',
+      tags: '',
+      selectedFile: '',
     });
   };
 
   const clear = () => {
     setPostData({
-      title: "",
-      message: "",
-      tags: "",
-      selectedFile: "",
+      title: '',
+      message: '',
+      tags: '',
+      selectedFile: '',
     });
     setCurrentId(null);
   };
@@ -75,7 +79,7 @@ const Form = ({ currentId, setCurrentId }) => {
         action=""
       >
         <Typography variant="h6">
-          {currentId ? "Editing" : "Creating"} Memories
+          {currentId ? 'Editing' : 'Creating'} Memories
         </Typography>
         <TextField
           name="title"
@@ -104,7 +108,7 @@ const Form = ({ currentId, setCurrentId }) => {
           fullWidth
           value={postData.tags}
           onChange={(e) =>
-            setPostData({ ...postData, tags: e.target.value.split(",") })
+            setPostData({ ...postData, tags: e.target.value.split(',') })
           }
         />
         <div className={classes.fileInput}>

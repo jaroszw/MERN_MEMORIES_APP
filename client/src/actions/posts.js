@@ -4,8 +4,8 @@ import {
   UPDATE,
   DELETE,
   LIKE,
-} from "../reducers/actionTypes";
-import * as api from "../api/index";
+} from '../reducers/actionTypes';
+import * as api from '../api/index';
 
 export const getPosts = () => async (dispatch) => {
   try {
@@ -17,10 +17,9 @@ export const getPosts = () => async (dispatch) => {
 };
 
 export const createPost = (post) => async (dispatch) => {
-  console.log("ACTION POST", post);
   try {
     const { data } = await api.createPost(post);
-    console.log("POST_RETURNED_FROM_BACKEND", data);
+    console.log('FRON_API CREATE', data);
     dispatch({ type: CREATE, payload: data });
   } catch (error) {
     console.log(error);

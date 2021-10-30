@@ -1,6 +1,6 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useStyles } from "./styles";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useStyles } from './styles';
 import {
   Card,
   CardActions,
@@ -8,19 +8,19 @@ import {
   CardMedia,
   Button,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import moment from "moment";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import moment from 'moment';
 
-import { deletePost, likePost } from "../../../actions/posts";
+import { deletePost, likePost } from '../../../actions/posts';
 
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem("profile"));
+  const user = JSON.parse(localStorage.getItem('profile'));
 
   const Likes = () => {
     if (post.likes.length > 0) {
@@ -32,12 +32,12 @@ const Post = ({ post, setCurrentId }) => {
           &nbsp;
           {post.likes.length > 2
             ? `You and ${post.likes.length - 1} others`
-            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+            : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}`}
         </React.Fragment>
       ) : (
         <React.Fragment>
           <ThumbUpOffAltIcon fontSize="small" />
-          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+          &nbsp;{post.likes.length} {post.likes.length === 1 ? 'Like' : 'Likes'}
         </React.Fragment>
       );
     }
@@ -64,13 +64,16 @@ const Post = ({ post, setCurrentId }) => {
         </Typography>
       </div>
       <div className={classes.overlay2}>
-        <Button
-          style={{ color: "white" }}
-          size="small"
-          onClick={() => setCurrentId(post._id)}
-        >
-          <MoreHorizIcon fontSize="inherit" />
-        </Button>
+        {user?.result?.googleId === post?.creator ||
+          (user?.result?._id === post?.creator && (
+            <Button
+              style={{ color: 'white' }}
+              size="small"
+              onClick={() => setCurrentId(post._id)}
+            >
+              <MoreHorizIcon fontSize="inherit" />
+            </Button>
+          ))}
       </div>
       <div className={classes.details}>
         <Typography variant="body2" color="textSecondary">
@@ -96,15 +99,18 @@ const Post = ({ post, setCurrentId }) => {
         >
           <Likes />
         </Button>
-        <Button
-          size="small"
-          color="primary"
-          onClick={() => {
-            dispatch(deletePost(post._id));
-          }}
-        >
-          <DeleteOutlineIcon fontSize="small" /> Delete
-        </Button>
+        {user?.result?.googleId === post?.creator ||
+          (user?.result?._id === post?.creator && (
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => {
+                dispatch(deletePost(post._id));
+              }}
+            >
+              <DeleteOutlineIcon fontSize="small" /> Delete
+            </Button>
+          ))}
       </CardActions>
     </Card>
   );
