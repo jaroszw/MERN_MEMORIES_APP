@@ -31,3 +31,5 @@ export const signin = (formData, history) => async (dispatch) => {
     console.log(error, error.message);
   }
 };
+
+// export const googleSingin = ()

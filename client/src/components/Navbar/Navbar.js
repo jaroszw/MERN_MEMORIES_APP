@@ -14,8 +14,11 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user?.user);
 
   if (user) {
+    console.log('token', JSON.parse(localStorage.getItem('user')).token);
     console.log(user.name.charAt(0));
   }
+
+  console.log('NAVBAR USER', JSON.parse(localStorage.getItem('user')));
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });

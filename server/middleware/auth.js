@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 const auth = async (req, res, next) => {
+  const cookies = req.cookies['jwt'];
+  console.log('COOKIES', cookies);
   try {
     const token = req.headers.authorization.split(' ')[1];
     const isCustomAuth = token.length < 500;

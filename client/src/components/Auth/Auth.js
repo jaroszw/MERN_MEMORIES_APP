@@ -60,8 +60,10 @@ const Auth = (props) => {
     const result = res?.profileObj;
     const token = res?.tokenId;
 
+    console.log(result, token);
+
     try {
-      dispatch({ type: 'AUTH', data: { result, token } });
+      dispatch({ type: 'GOOGLE_SIGN_IN', data: { result, token } });
       history.push('/');
     } catch (error) {
       console.log(error);
@@ -69,7 +71,7 @@ const Auth = (props) => {
   };
 
   const googleFailure = async () => {
-    console.log('Google Sign In was unsuccessfull. Try again!');
+    console.log('Google Sign In was not unsuccessfull. Try again!');
   };
 
   return (

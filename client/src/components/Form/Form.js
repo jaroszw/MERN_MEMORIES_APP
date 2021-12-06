@@ -12,8 +12,6 @@ const Form = ({ currentId, setCurrentId }) => {
     currentId ? state.posts.posts.find((post) => post._id === currentId) : null
   );
 
-  const test = useSelector((state) => state);
-
   const classes = useStyles();
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
@@ -22,7 +20,7 @@ const Form = ({ currentId, setCurrentId }) => {
     tags: '',
     selectedFile: '',
   });
-  const user = JSON.parse(localStorage.getItem('profile'));
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     if (post) {
@@ -31,7 +29,6 @@ const Form = ({ currentId, setCurrentId }) => {
   }, [post]);
 
   const handleSubmit = (e) => {
-    console.log('FORM CURRENT_ID', currentId);
     e.preventDefault();
     if (currentId === 0) {
       dispatch(createPost({ ...postData, name: user?.result?.name }));
@@ -59,7 +56,7 @@ const Form = ({ currentId, setCurrentId }) => {
     setCurrentId(null);
   };
 
-  if (!user?.result?.name) {
+  if (!user?.user?.name) {
     return (
       <Paper className={classes.paper}>
         <Typography variant="h6" align="center">
