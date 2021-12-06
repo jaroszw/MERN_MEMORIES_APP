@@ -45,6 +45,7 @@ const Auth = (props) => {
 
     if (isSignup) {
       dispatch(signup(formData, history));
+      setIsSignup((prevIsSignup) => !prevIsSignup);
     } else {
       dispatch(signin(formData, history));
     }

@@ -31,7 +31,7 @@ export const signin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ result: oldUser, token });
+    res.status(200).json({ user: oldUser, token });
   } catch (error) {
     res.status(500).json({ message: 'Sth went wrong' });
   }
@@ -67,9 +67,7 @@ export const signup = async (req, res) => {
       }
     );
 
-    res.cookies();
-
-    res.status(200).json({ result, token });
+    res.status(200).json({ message: 'user sing up succesfully', succes: 'ok' });
   } catch (error) {
     res.status(500).json(error);
   }

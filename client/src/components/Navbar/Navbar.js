@@ -1,33 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Typography, Avatar, Button, Toolbar } from '@mui/material';
 import memories from '../../images/memories.png';
 import useStyles from './styles';
 
-import decode from 'jwt-decode';
+// import decode from 'jwt-decode';
 
 const Navbar = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
-  const location = useLocation();
+  const user = useSelector((state) => state.auth.user?.user);
 
-  useEffect(() => {
-    const token = user?.token;
-
-    if (token) {
-      const decodedToken = decode(token);
-      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
-    }
-    setUser(JSON.parse(localStorage.getItem('profile')));
-  }, [location]);
+  if (user) {
+    console.log(user.name.charAt(0));
+  }
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
     history.push('/');
-    setUser(null);
   };
 
   return (
@@ -49,14 +41,14 @@ const Navbar = () => {
           <div className={classes.profile}>
             <Avatar
               className={classes.purple}
-              alt={user.result.name}
-              src={user.result.imageUrl}
+              alt={user.name}
+              src={user?.imageUrl}
             >
-              {user.result.name.charAt(0)}
+              {user.name.charAt(0)}
             </Avatar>
             <Typography className={classes.userName} variant="h6">
-              {user.result.name}
-            </Typography>
+              {user.name}
+            </Typography>{' '}
             <Button
               variant="contained"
               className={classes.logout}
@@ -73,7 +65,7 @@ const Navbar = () => {
             color="primary"
             variant="contained"
           >
-            Sign In{' '}
+            User{' '}
           </Button>
         )}
       </Toolbar>
