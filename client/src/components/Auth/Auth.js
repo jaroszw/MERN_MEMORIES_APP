@@ -39,6 +39,7 @@ const Auth = (props) => {
     setShowPassword(false);
   };
   const handleShowPassword = () => setShowPassword(!showPassword);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 

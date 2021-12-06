@@ -26,6 +26,11 @@ export const signin = async (req, res) => {
       }
     );
 
+    res.cookie('jwt', JSON.stringify(token), {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
     res.status(200).json({ result: oldUser, token });
   } catch (error) {
     res.status(500).json({ message: 'Sth went wrong' });
@@ -61,6 +66,8 @@ export const signup = async (req, res) => {
         expiresIn: '1h',
       }
     );
+
+    res.cookies();
 
     res.status(200).json({ result, token });
   } catch (error) {

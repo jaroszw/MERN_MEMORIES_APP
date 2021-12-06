@@ -22,6 +22,8 @@ const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem('profile'));
 
+  console.log(post);
+
   const Likes = () => {
     if (post.likes.length > 0) {
       return post.likes.find(
@@ -64,16 +66,16 @@ const Post = ({ post, setCurrentId }) => {
         </Typography>
       </div>
       <div className={classes.overlay2}>
-        {user?.result?.googleId === post?.creator ||
-          (user?.result?._id === post?.creator && (
-            <Button
-              style={{ color: 'white' }}
-              size="small"
-              onClick={() => setCurrentId(post._id)}
-            >
-              <MoreHorizIcon fontSize="inherit" />
-            </Button>
-          ))}
+        {(user?.result?.googleId === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <Button
+            style={{ color: 'white' }}
+            size="small"
+            onClick={() => setCurrentId(post._id)}
+          >
+            <MoreHorizIcon fontSize="inherit" />
+          </Button>
+        )}
       </div>
       <div className={classes.details}>
         <Typography variant="body2" color="textSecondary">
@@ -99,18 +101,18 @@ const Post = ({ post, setCurrentId }) => {
         >
           <Likes />
         </Button>
-        {user?.result?.googleId === post?.creator ||
-          (user?.result?._id === post?.creator && (
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => {
-                dispatch(deletePost(post._id));
-              }}
-            >
-              <DeleteOutlineIcon fontSize="small" /> Delete
-            </Button>
-          ))}
+        {(user?.result?.googleId === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => {
+              dispatch(deletePost(post._id));
+            }}
+          >
+            <DeleteOutlineIcon fontSize="small" /> Delete
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
