@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const signin = async (req, res) => {
+  console.log('SIGNING IN');
   const { password, email } = req.body;
 
   try {

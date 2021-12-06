@@ -55,8 +55,16 @@ const Auth = (props) => {
   };
 
   const googleSuccess = async (res) => {
-    const result = res?.profileObj;
+    const googleData = res?.profileObj;
+
+    const result = {
+      name: googleData.name,
+      email: googleData.email,
+      imageUrl: googleData.imageUrl,
+    };
+
     const token = res?.tokenId;
+    console.log('GOOGLE TOKEN', token);
 
     try {
       dispatch({ type: 'AUTH', data: { result, token } });
