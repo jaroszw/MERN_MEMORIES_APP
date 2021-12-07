@@ -1,6 +1,6 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useStyles } from './styles';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useStyles } from "./styles";
 import {
   Card,
   CardActions,
@@ -8,36 +8,34 @@ import {
   CardMedia,
   Button,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import moment from 'moment';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import moment from "moment";
 
-import { deletePost, likePost } from '../../../actions/posts';
+import { deletePost, likePost } from "../../../actions/posts";
 
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem('profile'));
+  const currentUser = useSelector((state) => state.auth.user);
 
   const Likes = () => {
     if (post.likes.length > 0) {
-      return post.likes.find(
-        (like) => like === (user?.result?.googleId || user?.result?._id)
-      ) ? (
+      return post.likes.find((like) => like === currentUser?.user?._id) ? (
         <React.Fragment>
           <ThumbUpOffAltIcon fontSize="small" />
           &nbsp;
           {post.likes.length > 2
             ? `You and ${post.likes.length - 1} others`
-            : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}`}
+            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
         </React.Fragment>
       ) : (
         <React.Fragment>
           <ThumbUpOffAltIcon fontSize="small" />
-          &nbsp;{post.likes.length} {post.likes.length === 1 ? 'Like' : 'Likes'}
+          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
         </React.Fragment>
       );
     }
@@ -64,10 +62,9 @@ const Post = ({ post, setCurrentId }) => {
         </Typography>
       </div>
       <div className={classes.overlay2}>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
+        {currentUser?.user?._id === post?.creator && (
           <Button
-            style={{ color: 'white' }}
+            style={{ color: "white" }}
             size="small"
             onClick={() => setCurrentId(post._id)}
           >
@@ -92,15 +89,14 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           size="small"
           color="primary"
-          disabled={!user?.result}
+          disabled={!currentUser?.user}
           onClick={() => {
             dispatch(likePost(post._id));
           }}
         >
           <Likes />
         </Button>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
+        {currentUser?.user?._id === post?.creator && (
           <Button
             size="small"
             color="primary"

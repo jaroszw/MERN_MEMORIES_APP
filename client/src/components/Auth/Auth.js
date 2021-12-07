@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
   Avatar,
   Button,
@@ -8,21 +8,21 @@ import {
   Grid,
   Typography,
   Container,
-} from '@mui/material';
-import LockIcon from '@mui/icons-material/Lock';
-import useStyles from './styles.js';
-import { useTheme } from '@mui/styles';
-import Input from './Input';
-import { GoogleLogin } from 'react-google-login';
-import Icon from './Icon';
-import { signup, signin } from '../../actions/auth';
+} from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
+import useStyles from "./styles.js";
+import { useTheme } from "@mui/styles";
+import Input from "./Input";
+import { GoogleLogin } from "react-google-login";
+import Icon from "./Icon";
+import { signup, signin, googleSingin } from "../../actions/auth";
 
 const initialState = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
 };
 
 const Auth = (props) => {
@@ -57,21 +57,20 @@ const Auth = (props) => {
   };
 
   const googleSuccess = async (res) => {
-    const result = res?.profileObj;
-    const token = res?.tokenId;
+    const tokenId = res?.tokenId;
+    // const token = res?.tokenId;
 
-    console.log(result, token);
+    console.log("GOOGLE SIGNIN", res);
 
     try {
-      dispatch({ type: 'GOOGLE_SIGN_IN', data: { result, token } });
-      history.push('/');
+      dispatch(googleSingin(tokenId, history));
     } catch (error) {
       console.log(error);
     }
   };
 
   const googleFailure = async () => {
-    console.log('Google Sign In was not unsuccessfull. Try again!');
+    console.log("Google Sign In was not unsuccessfull. Try again!");
   };
 
   return (
@@ -81,7 +80,7 @@ const Auth = (props) => {
           <LockIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          {isSignup ? 'Sign Up' : ' Sign In'}
+          {isSignup ? "Sign Up" : " Sign In"}
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -113,7 +112,7 @@ const Auth = (props) => {
                 name="password"
                 label="Password"
                 handleChange={handleChange}
-                type={showPassword ? 'password' : 'text'}
+                type={showPassword ? "password" : "text"}
                 handleShowPassword={handleShowPassword}
               />
             </React.Fragment>
@@ -133,7 +132,7 @@ const Auth = (props) => {
             color="primary"
             className={classes.submit}
           >
-            {isSignup ? 'Sign Up' : 'Sign In'}
+            {isSignup ? "Sign Up" : "Sign In"}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
@@ -158,7 +157,7 @@ const Auth = (props) => {
               />
               <Button onClick={switchMode}>
                 {isSignup
-                  ? 'Already have an account? Sign in'
+                  ? "Already have an account? Sign in"
                   : "Don't have an account? Sign Up"}
               </Button>
             </Grid>

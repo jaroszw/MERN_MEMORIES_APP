@@ -1,6 +1,9 @@
-import User from '../models/user.js';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import User from "../models/user.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const signin = async (req, res) => {
   const { password, email } = req.body;
@@ -15,25 +18,25 @@ export const signin = async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, oldUser.password);
 
     if (!isPasswordCorrect) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
       { email: oldUser.email, id: oldUser._id },
       process.env.SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: "1h",
       }
     );
 
-    res.cookie('jwt', JSON.stringify(token), {
+    res.cookie("jwt", JSON.stringify(token), {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({ user: oldUser, token });
   } catch (error) {
-    res.status(500).json({ message: 'Sth went wrong' });
+    res.status(500).json({ message: "Sth went wrong" });
   }
 };
 
@@ -44,7 +47,7 @@ export const signup = async (req, res) => {
     const oldUser = await User.findOne({ email });
 
     if (oldUser) {
-      return res.status(400).json({ message: 'User already existis' });
+      return res.status(400).json({ message: "User already existis" });
     }
 
     if (password !== confirmPassword) {
@@ -59,16 +62,28 @@ export const signup = async (req, res) => {
       email,
     });
 
-    const token = jwt.sign(
-      { email: result.email, id: result._id },
-      process.env.SECRET,
-      {
-        expiresIn: '1h',
-      }
-    );
+    // const token = jwt.sign(
+    //   { email: result.email, id: result._id },
+    //   process.env.SECRET,
+    //   {
+    //     expiresIn: "1h",
+    //   }
+    // );
 
-    res.status(200).json({ message: 'user sing up succesfully', succes: 'ok' });
+    res.status(200).json({ message: "user sing up succesfully", succes: "ok" });
   } catch (error) {
     res.status(500).json(error);
   }
+};
+
+export const googleSingin = async (req, res) => {
+  const { tokenId } = req.body;
+
+  const response = await client.verifyIdToken({
+    idToken: tokenId,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const { email_veryfied, name, email } = await response.payload;
+  console.log(response.payload);
 };
