@@ -60,8 +60,6 @@ const Auth = (props) => {
     const tokenId = res?.tokenId;
     // const token = res?.tokenId;
 
-    console.log("GOOGLE SIGNIN", res);
-
     try {
       dispatch(googleSingin(tokenId, history));
     } catch (error) {

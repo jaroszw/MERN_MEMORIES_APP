@@ -1,5 +1,6 @@
-import PostMessage from '../models/postsMessage.js';
-import mongoose from 'mongoose';
+import PostMessage from "../models/postsMessage.js";
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
 export const getPosts = async (req, res) => {
   try {
@@ -57,7 +58,7 @@ export const deletePost = async (req, res) => {
 
   try {
     await PostMessage.findOneAndRemove(id);
-    res.status(200).send({ message: 'Post deleted successfully' });
+    res.status(200).send({ message: "Post deleted successfully" });
   } catch (error) {
     res.status(400).send({ error: error });
   }
@@ -65,13 +66,12 @@ export const deletePost = async (req, res) => {
 
 export const likePost = async (req, res) => {
   const { id } = req.params;
-
   if (!mongoose.Types.ObjectId.isValid(req.userId)) {
     return res.status(404).send(`No post with id: ${req.id}`);
   }
 
   if (!req.userId) {
-    return res.json({ message: 'Unauthenticated' });
+    return res.json({ message: "Unauthenticated" });
   }
 
   try {
@@ -90,7 +90,7 @@ export const likePost = async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (error) {
-    console.log('ERRROR');
+    console.log("ERRROR");
     res.status(400).send({ error: error });
   }
 };

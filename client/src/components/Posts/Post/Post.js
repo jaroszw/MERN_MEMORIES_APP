@@ -20,11 +20,11 @@ import { deletePost, likePost } from "../../../actions/posts";
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.auth.user);
+  const { user } = useSelector((state) => state.auth);
 
   const Likes = () => {
     if (post.likes.length > 0) {
-      return post.likes.find((like) => like === currentUser?.user?._id) ? (
+      return post.likes.find((like) => like === user?.id) ? (
         <React.Fragment>
           <ThumbUpOffAltIcon fontSize="small" />
           &nbsp;
@@ -62,7 +62,7 @@ const Post = ({ post, setCurrentId }) => {
         </Typography>
       </div>
       <div className={classes.overlay2}>
-        {currentUser?.user?._id === post?.creator && (
+        {user?.id === post?.creator && (
           <Button
             style={{ color: "white" }}
             size="small"
@@ -89,14 +89,14 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           size="small"
           color="primary"
-          disabled={!currentUser?.user}
+          disabled={!user}
           onClick={() => {
             dispatch(likePost(post._id));
           }}
         >
           <Likes />
         </Button>
-        {currentUser?.user?._id === post?.creator && (
+        {user?.id === post?.creator && (
           <Button
             size="small"
             color="primary"

@@ -15,7 +15,6 @@ export const signup = (formData, history) => async (dispatch) => {
   try {
     dispatch({ type: SIGN_UP_START });
     const { data } = await api.signUp(formData);
-    console.log(data);
     dispatch({ type: SIGN_UP_SUCCESS });
   } catch (error) {
     dispatch({ type: SIGN_UP_FAILURE, payload: error });
@@ -36,8 +35,6 @@ export const signin = (formData, history) => async (dispatch) => {
 };
 
 export const googleSingin = (tokenId, history) => async (dispatch) => {
-  console.log("GOOGLE CALL TOKENID", { tokenId });
-
   try {
     // dispatch({ type: GOOGLE_SIGN_IN_START });
     const data = await api.googleSingin({ tokenId });

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { AppBar, Typography, Avatar, Button, Toolbar } from '@mui/material';
-import memories from '../../images/memories.png';
-import useStyles from './styles';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { AppBar, Typography, Avatar, Button, Toolbar } from "@mui/material";
+import memories from "../../images/memories.png";
+import useStyles from "./styles";
 
 // import decode from 'jwt-decode';
 
@@ -11,18 +11,11 @@ const Navbar = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state) => state.auth.user?.user);
-
-  if (user) {
-    console.log('token', JSON.parse(localStorage.getItem('user')).token);
-    console.log(user.name.charAt(0));
-  }
-
-  console.log('NAVBAR USER', JSON.parse(localStorage.getItem('user')));
+  const { user } = useSelector((state) => state.auth);
 
   const logout = () => {
-    dispatch({ type: 'LOGOUT' });
-    history.push('/');
+    dispatch({ type: "LOGOUT" });
+    history.push("/");
   };
 
   return (
@@ -51,7 +44,7 @@ const Navbar = () => {
             </Avatar>
             <Typography className={classes.userName} variant="h6">
               {user.name}
-            </Typography>{' '}
+            </Typography>{" "}
             <Button
               variant="contained"
               className={classes.logout}
@@ -68,7 +61,7 @@ const Navbar = () => {
             color="primary"
             variant="contained"
           >
-            User{' '}
+            User{" "}
           </Button>
         )}
       </Toolbar>
