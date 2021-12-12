@@ -27,12 +27,13 @@ export const signin = (formData, history) => async (dispatch) => {
     dispatch({ type: SIGN_IN_START });
     const { data } = await api.signIn(formData);
     dispatch({ type: SIGN_IN_SUCCESS, payload: data });
-    history.push('/');
+    history.push("/");
   } catch (error) {
     dispatch({ type: SIGN_IN_FAILURE, payload: error });
   }
 };
 
+<<<<<<< HEAD
 export const googleSignIn = (formData, history) => async (dispatch) => {
   console.log(formData);
   try {
@@ -44,5 +45,14 @@ export const googleSignIn = (formData, history) => async (dispatch) => {
   } catch (error) {
     dispatch({ type: GOOGLE_SIGN_IN_FAILURE, payload: error });
     console.log(error, error.message);
+=======
+export const googleSingin = (tokenId, history) => async (dispatch) => {
+  try {
+    // dispatch({ type: GOOGLE_SIGN_IN_START });
+    const data = await api.googleSingin({ tokenId });
+    // api.dispatch({ type: GOOGLE_SIGN_IN_SUCCESS, payloda: data });
+  } catch (error) {
+    dispatch({ type: GOOGLE_SIGN_IN_FAILURE, payload: error });
+>>>>>>> d7cd1e4435e0611bd10a62d7e37af6124a6f5300
   }
 };

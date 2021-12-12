@@ -1,6 +1,6 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useStyles } from './styles';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useStyles } from "./styles";
 import {
   Card,
   CardActions,
@@ -8,14 +8,14 @@ import {
   CardMedia,
   Button,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import moment from 'moment';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import moment from "moment";
 
-import { deletePost, likePost } from '../../../actions/posts';
+import { deletePost, likePost } from "../../../actions/posts";
 
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
@@ -24,20 +24,18 @@ const Post = ({ post, setCurrentId }) => {
 
   const Likes = () => {
     if (post.likes.length > 0) {
-      return post.likes.find(
-        (like) => like === (user?.result?.googleId || user?.result?._id)
-      ) ? (
+      return post.likes.find((like) => like === user?.id) ? (
         <React.Fragment>
           <ThumbUpOffAltIcon fontSize="small" />
           &nbsp;
           {post.likes.length > 2
             ? `You and ${post.likes.length - 1} others`
-            : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}`}
+            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
         </React.Fragment>
       ) : (
         <React.Fragment>
           <ThumbUpOffAltIcon fontSize="small" />
-          &nbsp;{post.likes.length} {post.likes.length === 1 ? 'Like' : 'Likes'}
+          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
         </React.Fragment>
       );
     }
@@ -64,10 +62,14 @@ const Post = ({ post, setCurrentId }) => {
         </Typography>
       </div>
       <div className={classes.overlay2}>
+<<<<<<< HEAD
         {(user?.user?.googleId === post?.creator ||
           user?.user?._id === post?.creator) && (
+=======
+        {user?.id === post?.creator && (
+>>>>>>> d7cd1e4435e0611bd10a62d7e37af6124a6f5300
           <Button
-            style={{ color: 'white' }}
+            style={{ color: "white" }}
             size="small"
             onClick={() => setCurrentId(post._id)}
           >
@@ -92,15 +94,23 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           size="small"
           color="primary"
+<<<<<<< HEAD
           disabled={!user?.user}
+=======
+          disabled={!user}
+>>>>>>> d7cd1e4435e0611bd10a62d7e37af6124a6f5300
           onClick={() => {
             dispatch(likePost(post._id));
           }}
         >
           <Likes />
         </Button>
+<<<<<<< HEAD
         {(user?.user?.googleId === post?.creator ||
           user?.user?._id === post?.creator) && (
+=======
+        {user?.id === post?.creator && (
+>>>>>>> d7cd1e4435e0611bd10a62d7e37af6124a6f5300
           <Button
             size="small"
             color="primary"

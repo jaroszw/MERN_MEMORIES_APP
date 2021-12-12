@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import useStyles from './styles';
-import { Button, Typography, Paper, TextField } from '@mui/material';
-import FileBase from 'react-file-base64';
-import { useDispatch } from 'react-redux';
-import { createPost, updatePost } from '../../actions/posts';
+import React, { useState, useEffect } from "react";
+import useStyles from "./styles";
+import { Button, Typography, Paper, TextField } from "@mui/material";
+import FileBase from "react-file-base64";
+import { useDispatch } from "react-redux";
+import { createPost, updatePost } from "../../actions/posts";
 
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 const Form = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) =>
@@ -15,12 +15,14 @@ const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
-    title: '',
-    message: '',
-    tags: '',
-    selectedFile: '',
+    title: "",
+    message: "",
+    tags: "",
+    selectedFile: "",
   });
-  const user = JSON.parse(localStorage.getItem('user'));
+  // const user = JSON.parse(localStorage.getItem('user'));
+
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (post) {
@@ -39,24 +41,24 @@ const Form = ({ currentId, setCurrentId }) => {
     }
     setCurrentId(0);
     setPostData({
-      title: '',
-      message: '',
-      tags: '',
-      selectedFile: '',
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
     });
   };
 
   const clear = () => {
     setPostData({
-      title: '',
-      message: '',
-      tags: '',
-      selectedFile: '',
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
     });
     setCurrentId(null);
   };
 
-  if (!user?.user?.name) {
+  if (!user?.name) {
     return (
       <Paper className={classes.paper}>
         <Typography variant="h6" align="center">
@@ -76,7 +78,7 @@ const Form = ({ currentId, setCurrentId }) => {
         action=""
       >
         <Typography variant="h6">
-          {currentId ? 'Editing' : 'Creating'} Memories
+          {currentId ? "Editing" : "Creating"} Memories
         </Typography>
         <TextField
           name="title"
@@ -105,7 +107,7 @@ const Form = ({ currentId, setCurrentId }) => {
           fullWidth
           value={postData.tags}
           onChange={(e) =>
-            setPostData({ ...postData, tags: e.target.value.split(',') })
+            setPostData({ ...postData, tags: e.target.value.split(",") })
           }
         />
         <div className={classes.fileInput}>

@@ -55,25 +55,29 @@ export const signin = async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, oldUser.password);
 
     if (!isPasswordCorrect) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
-      { email: oldUser.email, id: oldUser._id },
+      { email: oldUser.email, id: oldUser._id, name: oldUser.name },
       process.env.SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: "1h",
       }
     );
 
-    res.cookie('jwt', JSON.stringify(token), {
+    res.cookie("jwt", JSON.stringify(token), {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ user: oldUser, token });
+    res.status(200).json({
+      email: oldUser.email,
+      id: oldUser._id,
+      name: oldUser.name,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Sth went wrong' });
+    res.status(500).json({ message: "Sth went wrong" });
   }
 };
 
@@ -106,4 +110,15 @@ export const googleSignIn = async (req, res) => {
       user: { _id, email, name, role },
     });
   }
+};
+
+export const googleSingin = async (req, res) => {
+  const { tokenId } = req.body;
+
+  const response = await client.verifyIdToken({
+    idToken: tokenId,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const { email_veryfied, name, email } = await response.payload;
 };
