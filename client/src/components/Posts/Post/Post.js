@@ -20,7 +20,8 @@ import { deletePost, likePost } from '../../../actions/posts';
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem('profile'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log(user);
 
   const Likes = () => {
     if (post.likes.length > 0) {
@@ -64,8 +65,8 @@ const Post = ({ post, setCurrentId }) => {
         </Typography>
       </div>
       <div className={classes.overlay2}>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
+        {(user?.user?.googleId === post?.creator ||
+          user?.user?._id === post?.creator) && (
           <Button
             style={{ color: 'white' }}
             size="small"
@@ -92,15 +93,15 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           size="small"
           color="primary"
-          disabled={!user?.result}
+          disabled={!user?.user}
           onClick={() => {
             dispatch(likePost(post._id));
           }}
         >
           <Likes />
         </Button>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
+        {(user?.user?.googleId === post?.creator ||
+          user?.user?._id === post?.creator) && (
           <Button
             size="small"
             color="primary"

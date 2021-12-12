@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Container, Grow, Grid } from "@mui/material";
-import Posts from "../Posts/Posts";
-import Form from "../Form/Form";
-import { useStyles } from "../Posts/Post/styles";
-import { getPosts } from "../../actions/posts";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { Container, Grow, Grid } from '@mui/material';
+import Posts from '../Posts/Posts';
+import Form from '../Form/Form';
+import { useStyles } from '../Posts/Post/styles';
+import { getPosts } from '../../actions/posts';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
   const [currentId, setCurrentId] = useState(0);
   const classes = useStyles();
 
   const dispatch = useDispatch();
+  const posts = useSelector((status) => status.posts.posts);
+  console.log(posts);
 
   useEffect(() => {
     dispatch(getPosts());
