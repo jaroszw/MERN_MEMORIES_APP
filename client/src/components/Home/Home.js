@@ -12,7 +12,6 @@ const Home = () => {
 
   const dispatch = useDispatch();
   const posts = useSelector((status) => status.posts.posts);
-  console.log(posts);
 
   useEffect(() => {
     dispatch(getPosts());

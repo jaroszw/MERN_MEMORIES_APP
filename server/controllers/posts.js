@@ -90,7 +90,6 @@ export const likePost = async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (error) {
-    console.log('ERRROR');
     res.status(400).send({ error: error });
   }
 };

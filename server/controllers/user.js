@@ -1,6 +1,46 @@
 import User from '../models/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+export const signup = async (req, res) => {
+  const { firstName, lastName, password, confirmPassword, email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({ message: 'User already existis' });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Password doesn't match" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const result = await User.create({
+      name: `${firstName} ${lastName}`,
+      password: hashedPassword,
+      email,
+    });
+
+    const token = jwt.sign(
+      { email: result.email, id: result._id },
+      process.env.SECRET,
+      {
+        expiresIn: '1h',
+      }
+    );
+
+    res.status(200).json({ message: 'user sing up succesfully', succes: 'ok' });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
 export const signin = async (req, res) => {
   const { password, email } = req.body;
@@ -37,38 +77,33 @@ export const signin = async (req, res) => {
   }
 };
 
-export const signup = async (req, res) => {
-  const { firstName, lastName, password, confirmPassword, email } = req.body;
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT);
 
-  try {
-    const oldUser = await User.findOne({ email });
+export const googleSignIn = async (req, res) => {
+  const { tokenId } = req.body;
 
-    if (oldUser) {
-      return res.status(400).json({ message: 'User already existis' });
-    }
+  const response = await client.verifyIdToken({
+    idToken: tokenId,
+    audience: process.env.GOOGLE_CLIENT,
+  });
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Password doesn't match" });
-    }
+  const { email, name, email_verified } = response.payload;
+  const user = await User.findOne({ email });
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const result = await User.create({
-      name: `${firstName} ${lastName}`,
-      password: hashedPassword,
-      email,
-    });
-
+  if (email_verified) {
     const token = jwt.sign(
-      { email: result.email, id: result._id },
+      { email: user.email, id: user._id },
       process.env.SECRET,
       {
         expiresIn: '1h',
       }
     );
 
-    res.status(200).json({ message: 'user sing up succesfully', succes: 'ok' });
-  } catch (error) {
-    res.status(500).json(error);
+    console.log(token);
+    const { _id, email, name, role } = user;
+    return res.status(200).json({
+      token,
+      user: { _id, email, name, role },
+    });
   }
 };

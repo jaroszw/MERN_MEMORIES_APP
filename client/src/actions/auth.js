@@ -5,6 +5,9 @@ import {
   SIGN_IN_START,
   SIGN_IN_SUCCESS,
   SIGN_IN_FAILURE,
+  GOOGLE_SIGN_IN_START,
+  GOOGLE_SIGN_IN_SUCCESS,
+  GOOGLE_SIGN_IN_FAILURE,
 } from '../reducers/actionTypes';
 import * as api from '../api/index';
 
@@ -12,7 +15,6 @@ export const signup = (formData, history) => async (dispatch) => {
   try {
     dispatch({ type: SIGN_UP_START });
     const { data } = await api.signUp(formData);
-    console.log(data);
     dispatch({ type: SIGN_UP_SUCCESS });
   } catch (error) {
     dispatch({ type: SIGN_UP_FAILURE, payload: error });
@@ -28,8 +30,19 @@ export const signin = (formData, history) => async (dispatch) => {
     history.push('/');
   } catch (error) {
     dispatch({ type: SIGN_IN_FAILURE, payload: error });
-    console.log(error, error.message);
   }
 };
 
-// export const googleSingin = ()
+export const googleSignIn = (formData, history) => async (dispatch) => {
+  console.log(formData);
+  try {
+    dispatch({ type: GOOGLE_SIGN_IN_START });
+    const { data } = await api.googleSignIn(formData);
+    console.log('RETURNDE', data);
+    // dispatch({ type: GOOGLE_SIGN_IN_SUCCESS, payload: data });
+    // history.push('/');
+  } catch (error) {
+    dispatch({ type: GOOGLE_SIGN_IN_FAILURE, payload: error });
+    console.log(error, error.message);
+  }
+};

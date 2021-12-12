@@ -15,7 +15,7 @@ import { useTheme } from '@mui/styles';
 import Input from './Input';
 import { GoogleLogin } from 'react-google-login';
 import Icon from './Icon';
-import { signup, signin } from '../../actions/auth';
+import { signup, signin, googleSignIn } from '../../actions/auth';
 
 const initialState = {
   firstName: '',
@@ -56,22 +56,16 @@ const Auth = (props) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const googleSuccess = async (res) => {
-    const result = res?.profileObj;
-    const token = res?.tokenId;
-
-    console.log(result, token);
+  const responseGoogle = async (res) => {
+    console.log(res);
+    const { tokenId } = res;
 
     try {
-      dispatch({ type: 'GOOGLE_SIGN_IN', data: { result, token } });
+      dispatch(googleSignIn({ tokenId }, history));
       history.push('/');
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const googleFailure = async () => {
-    console.log('Google Sign In was not unsuccessfull. Try again!');
   };
 
   return (
@@ -92,13 +86,11 @@ const Auth = (props) => {
                   label="First Name"
                   handleChange={handleChange}
                   autoFocus
-                  half
                 />
                 <Input
                   name="lastName"
                   label="Last Name"
                   handleChange={handleChange}
-                  half
                 />
               </React.Fragment>
             )}
@@ -152,8 +144,8 @@ const Auth = (props) => {
                     Google Sing In
                   </Button>
                 )}
-                onSuccess={googleSuccess}
-                onFailure={googleFailure}
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
                 cookiePolicy="single_host_origin"
               />
               <Button onClick={switchMode}>
